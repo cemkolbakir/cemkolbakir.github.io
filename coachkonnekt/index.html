@@ -33,18 +33,11 @@
 
 <section>
   <div class="wrap">
-    <p class="kicker">What coaches get</p>
     <h2>The whole team at a glance</h2>
-    <p class="lead">Every morning the board shows who is primed, who needs a lighter day, and who should be checked on.</p>
+    <p class="lead">Every day coaches know who is primed, who needs a lighter day, and who should be checked on.</p>
     <div class="example" id="exampleWrap">
       <iframe id="exampleBoard" src="/coachkonnekt/example/" title="CoachKonnekt team board" loading="lazy" scrolling="no"></iframe>
     </div>
-    <div class="grid3" style="margin-top:16px">
-      <div class="card"><div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div><h3>Team boards</h3><p>Recovery, HRV, resting heart rate, sleep and strain for every athlete, sorted and colour-coded.</p></div>
-      <div class="card"><div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div><h3>Early flags</h3><p>Low recovery, a sharp HRV drop, short sleep or a lost connection are flagged before training starts.</p></div>
-      <div class="card"><div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div><h3>Athlete trends</h3><p>30-day recovery, HRV, sleep and strain charts plus recent workouts for each athlete.</p></div>
-    </div>
-    <div class="legend-dots"><span style="color:var(--green)">Green 67–100%</span><span style="color:var(--yellow)">Yellow 34–66%</span><span style="color:var(--red)">Red 0–33%</span><span class="muted" style="color:var(--mute)">WHOOP recovery zones</span></div>
   </div>
 </section>
 
@@ -92,7 +85,7 @@
   // On phones it uses its own mobile layout instead.
   (function () {
     var wrap = document.getElementById('exampleWrap'), frame = document.getElementById('exampleBoard');
-    var DESIGN = 1280, contentH = 2000;
+    var DESIGN = 1216, contentH = 1700;
     function fit() {
       var w = wrap.clientWidth;
       if (w >= 700) {
