@@ -246,6 +246,7 @@
     if (state.role === 'owner') html += ownerPanel(athletes);
     app.innerHTML = html;
     wireOwner();
+    wireRemove();
   }
 
   // Owner only: every connected athlete, sync health, and moving athletes between teams.
@@ -255,11 +256,12 @@
       return '<tr><td class="name"><a href="#/athlete/' + a.id + '">' + esc(fullName(a)) + '</a></td>' +
         '<td><select data-move="' + a.id + '" aria-label="Team for ' + esc(fullName(a)) + '">' + opts(a.team_id) + '</select></td>' +
         '<td>' + (a.connected ? '<span class="z-green"><span class="dot"></span>Connected</span>' : '<span class="z-red"><span class="dot"></span>Disconnected</span>') + '</td>' +
-        '<td>' + esc(ago(a.last_sync_at)) + '</td><td class="small ' + (a.last_sync_error ? 'err' : 'muted') + '" style="white-space:normal;max-width:360px">' + esc(a.last_sync_error || 'OK') + '</td></tr>';
+        '<td>' + esc(ago(a.last_sync_at)) + '</td><td class="small ' + (a.last_sync_error ? 'err' : 'muted') + '" style="white-space:normal;max-width:360px">' + esc(a.last_sync_error || 'OK') + '</td>' +
+        '<td><button class="linkbtn danger" data-remove="' + a.id + '" data-name="' + esc(fullName(a)) + '">Remove</button></td></tr>';
     }).join('');
-    return '<div style="margin-top:32px"><p class="kicker">Owner</p><h2>All athletes and sync status</h2><p class="sub small" style="margin-bottom:12px">Only you can see this section. Change a team to move an athlete between boards.</p>' +
-      '<div class="tablewrap"><table><thead><tr><th>Athlete</th><th>Team</th><th>WHOOP</th><th>Last sync</th><th>Sync message</th></tr></thead><tbody>' +
-      (rows || '<tr><td colspan="5" class="muted">No athletes connected yet.</td></tr>') + '</tbody></table></div></div>';
+    return '<div style="margin-top:32px"><p class="kicker">Owner</p><h2>All athletes and sync status</h2><p class="sub small" style="margin-bottom:12px">Only you can see this section. Change a team to move an athlete between boards. Remove disconnects an athlete from WHOOP and deletes all their data.</p>' +
+      '<div class="tablewrap"><table><thead><tr><th>Athlete</th><th>Team</th><th>WHOOP</th><th>Last sync</th><th>Sync message</th><th></th></tr></thead><tbody>' +
+      (rows || '<tr><td colspan="6" class="muted">No athletes connected yet.</td></tr>') + '</tbody></table></div></div>';
   }
   function wireOwner() {
     app.querySelectorAll('select[data-move]').forEach(function (sel) {
@@ -271,7 +273,31 @@
       });
     });
   }
-  function alertBox(msg) { var p = document.createElement('p'); p.className = 'err'; p.textContent = msg; app.prepend(p); }
+  // Owner: revoke WHOOP access and delete all of an athlete's data (handled by the server function).
+  function wireRemove() {
+    app.querySelectorAll('button[data-remove]').forEach(function (btn) {
+      btn.addEventListener('click', async function () {
+        var name = btn.getAttribute('data-name');
+        if (!confirm('Remove ' + name + '?\n\nThis disconnects CoachKonnekt from their WHOOP account and permanently deletes all their data here. They can rejoin later with a team link.')) return;
+        btn.disabled = true; btn.textContent = 'Removing…';
+        try {
+          var r = await fetch(SUPABASE_URL + '/functions/v1/whoop/remove', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + state.session.access_token },
+            body: JSON.stringify({ athlete_id: btn.getAttribute('data-remove') })
+          });
+          var j = await r.json();
+          if (!r.ok) throw new Error(j.error || ('Error ' + r.status));
+          await route();
+          alertBox(name + ' was removed.' + (j.whoop_access_revoked ? ' WHOOP access revoked.' : ' WHOOP access was already disconnected.'), true);
+        } catch (e) {
+          btn.disabled = false; btn.textContent = 'Remove';
+          alertBox('Could not remove ' + name + ': ' + e.message);
+        }
+      });
+    });
+  }
+  function alertBox(msg, ok) { var p = document.createElement('p'); p.className = ok ? 'z-green' : 'err'; p.setAttribute('role', 'status'); p.textContent = msg; app.prepend(p); }
 
   async function teamPage(slug) {
     var team = state.teams.filter(function (t) { return t.slug === slug; })[0];

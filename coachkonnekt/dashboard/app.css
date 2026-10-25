@@ -28,6 +28,9 @@ main.wrap { flex: 1; padding-top: 32px; padding-bottom: 64px; }
 .role { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; color: var(--chalk); }
 .linkbtn { background: none; border: 1px solid var(--line); color: var(--chalk); border-radius: 8px; padding: 6px 10px; font: inherit; font-size: .85rem; cursor: pointer; }
 .linkbtn:hover { border-color: var(--chalk); }
+.linkbtn.danger { color: var(--red); border-color: rgba(255,77,94,.45); }
+.linkbtn.danger:hover { border-color: var(--red); }
+.linkbtn:disabled { opacity: .6; cursor: wait; }
 .foot { padding: 24px 16px; color: var(--mute); font-size: .8rem; border-top: 1px solid var(--line); text-align: center; }
 .foot a { color: var(--mute); }
 
