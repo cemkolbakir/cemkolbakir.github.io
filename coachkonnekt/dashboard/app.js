@@ -10,7 +10,12 @@
   var TZ = 'Europe/Istanbul';
   var HISTORY_DAYS = 35;
 
-  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  var RESET_URL = 'https://kolbakir.com/coachkonnekt/dashboard/?reset=1';
+  // Arriving from a password-reset email? (Read before Supabase tidies up the address bar.)
+  var linkError = /error_code=([a-z_]+)/.exec(location.hash);
+  var recovering = /type=recovery/.test(location.hash) || /[?&]reset=1/.test(location.search);
+
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { flowType: 'implicit', detectSessionInUrl: true, persistSession: true } });
   var app = document.getElementById('app');
   var nav = document.getElementById('nav');
   var who = document.getElementById('who');
@@ -138,10 +143,16 @@
   async function boot() {
     var res = await sb.auth.getSession();
     state.session = res.data.session;
-    sb.auth.onAuthStateChange(function (_e, session) {
+    sb.auth.onAuthStateChange(function (event, session) {
       var was = !!state.session; state.session = session;
+      if (event === 'PASSWORD_RECOVERY') { recovering = true; route(); return; }
       if (was !== !!session) { state.role = null; route(); }
     });
+    if (linkError) {
+      recovering = false;
+      history.replaceState(null, '', location.pathname);
+      return renderLogin(linkError[1] === 'otp_expired' ? 'That reset link has expired or was already used. Request a new one below.' : 'That reset link did not work. Request a new one below.');
+    }
     window.addEventListener('hashchange', route);
     route();
   }
@@ -154,12 +165,37 @@
       '<form id="lf"><label>Email<input type="email" id="em" autocomplete="username" required></label>' +
       '<label>Password<input type="password" id="pw" autocomplete="current-password" required></label>' +
       '<button class="btn" id="go" type="submit">Log in</button>' +
-      '<p class="err small" id="lerr" role="alert">' + esc(msg || '') + '</p></form></div>';
+      '<p class="err small" id="lerr" role="alert">' + esc(msg || '') + '</p>' +
+      '<p class="small" style="margin:0"><a href="#" id="forgot" class="muted">Forgot your password?</a></p></form></div>';
+    document.getElementById('forgot').addEventListener('click', function (e) { e.preventDefault(); renderForgot(document.getElementById('em').value.trim()); });
     document.getElementById('lf').addEventListener('submit', async function (e) {
       e.preventDefault();
       var b = document.getElementById('go'); b.disabled = true; b.textContent = 'Logging in…';
       var r = await sb.auth.signInWithPassword({ email: document.getElementById('em').value.trim(), password: document.getElementById('pw').value });
       if (r.error) { b.disabled = false; b.textContent = 'Log in'; document.getElementById('lerr').textContent = 'Wrong email or password.'; }
+    });
+  }
+
+  function renderForgot(prefill) {
+    nav.hidden = true; who.hidden = true;
+    app.innerHTML =
+      '<div class="login"><p class="kicker">Private</p><h1>Reset password</h1>' +
+      '<p class="sub">Enter your staff email. We will send you a link to choose a new password.</p>' +
+      '<form id="ff"><label>Email<input type="email" id="fem" autocomplete="username" required value="' + esc(prefill || '') + '"></label>' +
+      '<button class="btn" id="fgo" type="submit">Send reset link</button>' +
+      '<p class="small" id="fmsg" role="status"></p>' +
+      '<p class="small" style="margin:0"><a href="#" id="back" class="muted">← Back to login</a></p></form></div>';
+    document.getElementById('back').addEventListener('click', function (e) { e.preventDefault(); renderLogin(); });
+    document.getElementById('ff').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var b = document.getElementById('fgo'), m = document.getElementById('fmsg');
+      b.disabled = true; b.textContent = 'Sending…';
+      var r = await sb.auth.resetPasswordForEmail(document.getElementById('fem').value.trim(), { redirectTo: RESET_URL });
+      b.disabled = false; b.textContent = 'Send reset link';
+      if (r.error && /rate|seconds/i.test(r.error.message)) { m.className = 'small err'; m.textContent = 'Too many requests. Please wait a minute and try again.'; return; }
+      // Same answer whether or not the email has an account, so nobody can probe for staff emails.
+      m.className = 'small z-green';
+      m.textContent = 'If that email belongs to a staff account, a reset link is on its way. Check your inbox and spam folder.';
     });
   }
 
@@ -214,6 +250,7 @@
   async function route() {
     if (!state.session) return renderLogin();
     try {
+      if (recovering) return accountPage(true);
       if (!(await ensureStaff())) return;
       var h = location.hash.replace(/^#\/?/, '').split('/');
       if (h[0] === 'team' && h[1]) return await teamPage(h[1]);
@@ -443,9 +480,11 @@
   }
 
   // Change your own password while logged in.
-  function accountPage() {
-    renderNav('');
-    app.innerHTML = '<div class="login" style="margin-top:2vh"><p class="kicker">Account</p><h1>Change password</h1>' +
+  // Change password: from the header button, or after following a reset email (fromReset).
+  function accountPage(fromReset) {
+    if (fromReset) { nav.hidden = true; who.hidden = true; } else renderNav('');
+    app.innerHTML = '<div class="login" style="margin-top:2vh"><p class="kicker">' + (fromReset ? 'Reset password' : 'Account') + '</p>' +
+      '<h1>' + (fromReset ? 'Choose a new password' : 'Change password') + '</h1>' +
       '<p class="sub">' + esc(state.session.user.email) + '</p>' +
       '<form id="pf"><label>New password<input type="password" id="p1" autocomplete="new-password" minlength="8" required></label>' +
       '<label>Repeat new password<input type="password" id="p2" autocomplete="new-password" minlength="8" required></label>' +
@@ -458,8 +497,17 @@
       btn.disabled = true; btn.textContent = 'Saving…';
       var r = await sb.auth.updateUser({ password: a });
       btn.disabled = false; btn.textContent = 'Save new password';
-      if (r.error) { m.className = 'small err'; m.textContent = 'Could not change password: ' + r.error.message; }
-      else { m.className = 'small z-green'; m.textContent = 'Password changed. Use it next time you log in.'; document.getElementById('pf').reset(); }
+      if (r.error) { m.className = 'small err'; m.textContent = 'Could not change password: ' + r.error.message; return; }
+      document.getElementById('pf').reset();
+      m.className = 'small z-green';
+      if (fromReset) {
+        recovering = false;
+        history.replaceState(null, '', location.pathname + '#/');
+        m.innerHTML = 'Password saved. <a href="#/" id="cont">Continue to the dashboard →</a>';
+        document.getElementById('cont').addEventListener('click', function (ev) { ev.preventDefault(); route(); });
+      } else {
+        m.textContent = 'Password changed. Use it next time you log in.';
+      }
     });
   }
 
