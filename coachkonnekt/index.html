@@ -36,9 +36,8 @@
     <p class="kicker">What coaches get</p>
     <h2>The whole team at a glance</h2>
     <p class="lead">Every morning the board shows who is primed, who needs a lighter day, and who should be checked on.</p>
-    <div class="example">
-      <div class="example-bar"><span class="tag">Example data</span><span class="muted">The coach view with a demo squad. Real boards show your own athletes.</span></div>
-      <iframe id="exampleBoard" src="/coachkonnekt/example/" title="Example CoachKonnekt team board with a demo squad" loading="lazy" scrolling="no"></iframe>
+    <div class="example" id="exampleWrap">
+      <iframe id="exampleBoard" src="/coachkonnekt/example/" title="CoachKonnekt team board" loading="lazy" scrolling="no"></iframe>
     </div>
     <div class="grid3" style="margin-top:16px">
       <div class="card"><div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div><h3>Team boards</h3><p>Recovery, HRV, resting heart rate, sleep and strain for every athlete, sorted and colour-coded.</p></div>
@@ -89,9 +88,32 @@
 </section>
 </main>
 <script>
-  window.addEventListener('message', function (e) {
-    if (e.data && e.data.coachkonnektExample) document.getElementById('exampleBoard').style.height = e.data.coachkonnektExample + 'px';
-  });
+  // The board is drawn at full desktop width (1280px) and scaled to fit, so it keeps the desktop layout.
+  // On phones it uses its own mobile layout instead.
+  (function () {
+    var wrap = document.getElementById('exampleWrap'), frame = document.getElementById('exampleBoard');
+    var DESIGN = 1280, contentH = 2000;
+    function fit() {
+      var w = wrap.clientWidth;
+      if (w >= 700) {
+        var s = Math.min(1, w / DESIGN);
+        frame.style.width = DESIGN + 'px';
+        frame.style.height = contentH + 'px';
+        frame.style.transform = 'scale(' + s + ')';
+        wrap.style.height = Math.ceil(contentH * s) + 'px';
+      } else {
+        frame.style.width = '100%';
+        frame.style.transform = 'none';
+        frame.style.height = contentH + 'px';
+        wrap.style.height = 'auto';
+      }
+    }
+    window.addEventListener('message', function (e) {
+      if (e.data && e.data.coachkonnektExample) { contentH = e.data.coachkonnektExample; fit(); }
+    });
+    window.addEventListener('resize', fit);
+    fit();
+  })();
 </script>
 <footer class="foot"><div class="wrap">
   <span>© 2026 CoachKonnekt · <a href="mailto:cem@kolbakir.com">cem@kolbakir.com</a></span>
