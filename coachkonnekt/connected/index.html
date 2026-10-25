@@ -41,9 +41,13 @@
   var q = new URLSearchParams(location.search), err = q.get('error'), name = q.get('name');
   var reasons = {
     access_denied: 'You chose not to give CoachKonnekt access, so nothing was shared.',
-    invalid_link: 'This link is not valid. Please ask your coach for the current team link.',
-    link_expired: 'The sign-in took too long or was already used. Please start again from your coach\'s link.',
-    missing_code: 'WHOOP did not complete the sign-in. Please start again from your coach\'s link.',
+    invalid_link: 'This link is not valid. Please ask your coach for a new invite link.',
+    invite_invalid: 'This invite link is not valid. Please ask your coach for a new one.',
+    invite_used: 'This invite link has already been used. Each link works only once, so please ask your coach for a new one.',
+    invite_expired: 'This invite link has expired. Links are valid for 2 days, so please ask your coach for a new one.',
+    invite_cancelled: 'This invite link was cancelled by your coach. Please ask them for a new one.',
+    link_expired: 'The sign-in took too long or was already used. Please open your invite link again.',
+    missing_code: 'WHOOP did not complete the sign-in. Please open your invite link again.',
     server: 'CoachKonnekt had a problem saving your connection.'
   };
   if (err) {

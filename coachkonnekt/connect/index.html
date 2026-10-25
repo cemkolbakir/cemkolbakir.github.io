@@ -34,7 +34,7 @@
   <p class="muted" style="margin:16px 0 0">By connecting, you agree to the <a href="/coachkonnekt/privacy">privacy policy</a>.</p>
 </div>
 <div class="panel warn" id="nolink" hidden>
-  <p style="margin:0">This page needs your team's personal link. Please ask your coach to send it to you.</p>
+  <p style="margin:0">This page needs your personal invite link. Please ask your coach to send you one.</p>
 </div>
 </main>
 <footer class="foot"><div class="wrap">
@@ -43,9 +43,9 @@
 </div></footer>
 <script>
 (function(){
-  var team = new URLSearchParams(location.search).get('team');
-  if (!team) { document.getElementById('ready').hidden = true; document.getElementById('nolink').hidden = false; return; }
-  document.getElementById('go').href = 'https://qecbwvgftefrgeqghokr.supabase.co/functions/v1/whoop/connect?team=' + encodeURIComponent(team);
+  var invite = new URLSearchParams(location.search).get('invite');
+  if (!invite) { document.getElementById('ready').hidden = true; document.getElementById('nolink').hidden = false; return; }
+  document.getElementById('go').href = 'https://qecbwvgftefrgeqghokr.supabase.co/functions/v1/whoop/connect?invite=' + encodeURIComponent(invite);
 })();
 </script>
 </body>

@@ -6,7 +6,7 @@
 
   var SUPABASE_URL = 'https://qecbwvgftefrgeqghokr.supabase.co';
   var SUPABASE_KEY = 'sb_publishable_bJ2cXZMoK5esEOLOSzb0yw_ZcCCXehk';
-  var CONNECT_URL = 'https://kolbakir.com/coachkonnekt/connect/?team=';
+  var INVITE_URL = 'https://kolbakir.com/coachkonnekt/connect/?invite=';
   var TZ = 'Europe/Istanbul';
   var HISTORY_DAYS = 35;
 
@@ -83,7 +83,7 @@
       flags: []
     };
     var name = fullName(a);
-    if (!a.connected) s.flags.push({ kind: 'sync', t: name, m: 'Disconnected from WHOOP. Send them the team link to reconnect.' });
+    if (!a.connected) s.flags.push({ kind: 'sync', t: name, m: 'Disconnected from WHOOP. Send them a new invite link to reconnect.' });
     else if (!a.last_sync_at || Date.now() - Date.parse(a.last_sync_at) > 36 * 3600000) s.flags.push({ kind: 'sync', t: name, m: 'Last synced ' + ago(a.last_sync_at) });
     if (s.recovery != null && s.recovery < 34) s.flags.push({ kind: 'red', t: name, m: 'Recovery ' + s.recovery + '% (' + relDay(s.recoveryAt) + '). Keep training light.' });
     if (hrvDelta != null && hrvDelta < -0.15) s.flags.push({ kind: 'hrv', t: name, m: 'HRV ' + Math.round(-hrvDelta * 100) + '% below their 7-day average' });
@@ -211,7 +211,7 @@
     var email = state.session.user.email;
     var st = await sb.from('staff').select('name').eq('email', email.toLowerCase()).maybeSingle();
     state.staffName = st.data && st.data.name;
-    var t = await sb.from('teams').select('id,name,slug,invite_code,sort').order('sort');
+    var t = await sb.from('teams').select('id,name,slug,sort').order('sort');
     if (t.error) throw t.error;
     state.teams = t.data;
     who.innerHTML = '<span class="email">' + esc(state.staffName || email) + '</span><span class="role">' + esc(state.role) + '</span><a class="linkbtn" href="#/account" style="text-decoration:none">Password</a><button class="linkbtn" id="out">Log out</button>';
@@ -315,7 +315,7 @@
     app.querySelectorAll('button[data-remove]').forEach(function (btn) {
       btn.addEventListener('click', async function () {
         var name = btn.getAttribute('data-name');
-        if (!confirm('Remove ' + name + '?\n\nThis disconnects CoachKonnekt from their WHOOP account and permanently deletes all their data here. They can rejoin later with a team link.')) return;
+        if (!confirm('Remove ' + name + '?\n\nThis disconnects CoachKonnekt from their WHOOP account and permanently deletes all their data here. They can rejoin later with a new invite link.')) return;
         btn.disabled = true; btn.textContent = 'Removing…';
         try {
           var r = await fetch(SUPABASE_URL + '/functions/v1/whoop/remove', {
@@ -369,15 +369,75 @@
       barChart(days, { label: 'Team average recovery per day' }) + '</div>' +
       '<div class="panel"><h2>Flags <span class="muted small">(' + flags.length + ')</span></h2>' + flagList(flags) + '</div></div>';
     html += athleteTable(sums);
-    html += '<div class="panel invite" style="margin-top:16px"><h2>Invite athletes to ' + esc(team.name) + '</h2>' +
-      '<p class="sub small">Send this link to an athlete. When they connect WHOOP, they appear on this board.</p>' +
-      '<div class="linkrow"><code id="inv">' + esc(CONNECT_URL + team.invite_code) + '</code><button class="btn ghost" id="copy">Copy link</button></div></div>';
+    html += '<div class="panel invite" style="margin-top:16px"><h2>Invite an athlete to ' + esc(team.name) + '</h2>' +
+      '<p class="sub small">Each invite link is for one athlete. It works once and expires after 2 days.</p>' +
+      '<form id="invForm" class="linkrow"><input id="invName" maxlength="80" placeholder="Athlete name, e.g. Mert Demir" aria-label="Athlete name" required style="flex:1;min-width:220px">' +
+      '<button class="btn" id="invGo" type="submit">Create invite link</button></form>' +
+      '<div id="invNew" hidden></div>' +
+      '<div id="invList"><p class="muted small">Loading invites…</p></div></div>';
     app.innerHTML = html;
     wireTable(sums);
-    document.getElementById('copy').onclick = function () {
-      var t = document.getElementById('inv').textContent;
-      (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { document.getElementById('copy').textContent = 'Copied'; }, function () { prompt('Copy this link:', t); });
-    };
+    wireInvites(team);
+  }
+
+  // ------------------------------------------------------------ one-time invites
+  function copyText(text, btn) {
+    var done = function () { if (btn) { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy link'; }, 1500); } };
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () { prompt('Copy this link:', text); });
+    else prompt('Copy this link:', text);
+  }
+  function inviteStatus(i) {
+    if (i.cancelled_at) return ['Cancelled', 'muted'];
+    if (i.used_at) return ['Used ' + fmtDay(i.used_at), 'z-green'];
+    var left = Date.parse(i.expires_at) - Date.now();
+    if (left <= 0) return ['Expired', 'muted'];
+    var h = Math.floor(left / 3600000);
+    return ['Pending · expires in ' + (h >= 1 ? h + ' h' : Math.max(1, Math.round(left / 60000)) + ' min'), 'z-yellow'];
+  }
+  async function loadInvites(team) {
+    var box = document.getElementById('invList'); if (!box) return;
+    var r = await sb.from('invites').select('id,token,athlete_name,created_by,created_at,expires_at,used_at,cancelled_at')
+      .eq('team_id', team.id).order('created_at', { ascending: false }).limit(30);
+    if (r.error) { box.innerHTML = '<p class="err small">Could not load invites: ' + esc(r.error.message) + '</p>'; return; }
+    if (!r.data.length) { box.innerHTML = '<p class="muted small" style="margin:0">No invites yet.</p>'; return; }
+    box.innerHTML = '<div class="tablewrap" style="margin-top:6px"><table style="min-width:640px"><thead><tr><th>Athlete</th><th>Created</th><th>Status</th><th></th></tr></thead><tbody>' +
+      r.data.map(function (i) {
+        var st = inviteStatus(i), pending = st[1] === 'z-yellow';
+        return '<tr><td><b>' + esc(i.athlete_name) + '</b></td>' +
+          '<td class="small muted">' + esc(fmtDay(i.created_at)) + ' ' + esc(fmtTime(i.created_at)) + (i.created_by ? ' · ' + esc(i.created_by.split('@')[0]) : '') + '</td>' +
+          '<td class="small ' + st[1] + '">' + esc(st[0]) + '</td>' +
+          '<td style="text-align:right">' + (pending ? '<button class="linkbtn" data-copy="' + esc(INVITE_URL + i.token) + '">Copy link</button> <button class="linkbtn danger" data-cancel="' + i.id + '" data-name="' + esc(i.athlete_name) + '">Cancel</button>' : '') + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+    box.querySelectorAll('[data-copy]').forEach(function (b) { b.onclick = function () { copyText(b.getAttribute('data-copy'), b); }; });
+    box.querySelectorAll('[data-cancel]').forEach(function (b) {
+      b.onclick = async function () {
+        if (!confirm('Cancel the invite for ' + b.getAttribute('data-name') + '? The link will stop working.')) return;
+        b.disabled = true;
+        var u = await sb.from('invites').update({ cancelled_at: new Date().toISOString() }).eq('id', b.getAttribute('data-cancel'));
+        if (u.error) { b.disabled = false; alertBox('Could not cancel invite: ' + u.error.message); return; }
+        loadInvites(team);
+      };
+    });
+  }
+  function wireInvites(team) {
+    var form = document.getElementById('invForm'); if (!form) return;
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var name = document.getElementById('invName').value.trim(); if (!name) return;
+      var btn = document.getElementById('invGo'); btn.disabled = true; btn.textContent = 'Creating…';
+      var r = await sb.from('invites').insert({ team_id: team.id, athlete_name: name }).select('token,expires_at').single();
+      btn.disabled = false; btn.textContent = 'Create invite link';
+      var out = document.getElementById('invNew');
+      if (r.error) { out.hidden = false; out.innerHTML = '<p class="err small">Could not create invite: ' + esc(r.error.message) + '</p>'; return; }
+      var link = INVITE_URL + r.data.token;
+      out.hidden = false;
+      out.innerHTML = '<p class="small z-green" style="margin:12px 0 6px">Invite link for ' + esc(name) + ' is ready. Send it to them only; it expires ' + esc(fmtDay(r.data.expires_at)) + ' at ' + esc(fmtTime(r.data.expires_at)) + '.</p>' +
+        '<div class="linkrow"><code>' + esc(link) + '</code><button class="btn ghost" id="invCopy" type="button">Copy link</button></div>';
+      document.getElementById('invCopy').onclick = function () { copyText(link, this); };
+      document.getElementById('invName').value = '';
+      loadInvites(team);
+    });
+    loadInvites(team);
   }
 
   function tile(label, val) { return '<div class="panel tile"><div class="label">' + label + '</div><div class="val">' + val + '</div></div>'; }
@@ -392,7 +452,7 @@
 
   var sortState = { key: 'recovery', dir: 1 };
   function athleteTable(sums) {
-    if (!sums.length) return '<div class="panel"><p class="muted" style="margin:0">No athletes on this board yet. Send the invite link below.</p></div>';
+    if (!sums.length) return '<div class="panel"><p class="muted" style="margin:0">No athletes on this board yet. Create an invite link below.</p></div>';
     var cols = [['name', 'Athlete'], ['recovery', 'Recovery'], ['hrv', 'HRV vs 7d'], ['rhr', 'RHR'], ['sleep', 'Sleep'], ['strain', 'Yday strain'], [null, '7-day recovery'], ['sync', 'Last sync']];
     return '<div class="tablewrap"><table><thead><tr>' + cols.map(function (c) {
       return '<th>' + (c[0] ? '<button data-sort="' + c[0] + '">' + c[1] + (sortState.key === c[0] ? (sortState.dir > 0 ? ' ↑' : ' ↓') : '') + '</button>' : c[1]) + '</th>';
