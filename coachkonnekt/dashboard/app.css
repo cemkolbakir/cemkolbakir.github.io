@@ -17,7 +17,8 @@ main.wrap { flex: 1; padding-top: 32px; padding-bottom: 64px; }
 .top { position: sticky; top: 0; z-index: 10; background: rgba(30,34,37,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
 .top-in { display: flex; align-items: center; gap: 16px; min-height: 64px; flex-wrap: wrap; }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--chalk); }
-.brand img { width: 34px; height: 34px; }
+.brand img { width: 34px; height: 34px; display: block; }
+.brand img.wm { width: auto; height: 15px; }
 .brand span { font-family: var(--display); font-weight: 700; font-size: 1.5rem; text-transform: uppercase; letter-spacing: .02em; }
 .brand b { font-weight: 800; }
 .nav { display: flex; gap: 4px; flex: 1; flex-wrap: wrap; }

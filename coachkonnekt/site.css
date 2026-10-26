@@ -18,14 +18,15 @@ main { flex: 1; }
 .top { position: sticky; top: 0; z-index: 20; background: rgba(30,34,37,.88); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
 .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--chalk); }
-.brand img { width: 34px; height: 34px; }
+.brand img { width: 34px; height: 34px; display: block; }
+.brand img.wm { width: auto; height: 15px; }
 .brand span { font-family: var(--display); font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; }
 .brand b { font-weight: 800; }
 .links { display: flex; align-items: center; gap: 4px; }
 .links a { color: var(--mute); text-decoration: none; font-weight: 600; font-size: .92rem; padding: 8px 12px; border-radius: 8px; }
 .links a:hover { color: var(--chalk); }
 .links a.btn { color: var(--ink); padding: 9px 16px; margin-left: 6px; }
-@media (max-width: 640px) { .links a:not(.btn) { display: none; } .brand span { font-size: 1.25rem; } .links a.btn { padding: 8px 12px; } }
+@media (max-width: 640px) { .links a:not(.btn) { display: none; } .brand img.wm { height: 12px; } .links a.btn { padding: 8px 12px; } }
 
 /* buttons */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: var(--accent); color: var(--ink); font-weight: 700; padding: 13px 22px; border-radius: 10px; text-decoration: none; border: 0; font: inherit; font-weight: 700; cursor: pointer; transition: transform .15s; white-space: nowrap; }
