@@ -759,10 +759,10 @@
     var days = keys.map(function (k) { return dayData(d, k); });
     var series = [
       { title: 'Recovery', unit: '%', type: 'bar', max: 100, val: function (x) { return x.rec ? Math.round(x.rec.recovery_score) : null; }, color: function (v) { return zoneHex(v); }, fmt: function (v) { return v + '%'; }, view: 'recovery' },
+      { title: 'Day strain', unit: '0–21', type: 'bar', max: 21, val: function (x) { return x.cyc && x.cyc.strain != null ? round(x.cyc.strain, 1) : null; }, color: function () { return '#3aa0ff'; }, fmt: function (v) { return v.toFixed(1); }, view: 'strain' },
       { title: 'Heart rate variability', unit: 'ms', type: 'line', val: function (x) { return x.rec ? Math.round(x.rec.hrv_rmssd_milli) : null; }, color: function () { return '#ffffff'; }, fmt: String, view: 'recovery' },
       { title: 'Resting heart rate', unit: 'bpm', type: 'line', val: function (x) { return x.rec ? Math.round(x.rec.resting_heart_rate) : null; }, color: function () { return '#ff8a80'; }, fmt: String, view: 'recovery' },
-      { title: 'Sleep', unit: 'hours', type: 'bar', val: function (x) { return x.sleep && x.sleep.total_sleep_milli != null ? x.sleep.total_sleep_milli : null; }, color: function () { return '#8fa6c0'; }, fmt: hmClock, view: 'sleep', maxFrom: function (vals) { return Math.max(10 * 3600000, Math.max.apply(null, vals) * 1.1); } },
-      { title: 'Day strain', unit: '0–21', type: 'bar', max: 21, val: function (x) { return x.cyc && x.cyc.strain != null ? round(x.cyc.strain, 1) : null; }, color: function () { return '#3aa0ff'; }, fmt: function (v) { return v.toFixed(1); }, view: 'strain' }
+      { title: 'Sleep', unit: 'hours', type: 'bar', val: function (x) { return x.sleep && x.sleep.total_sleep_milli != null ? x.sleep.total_sleep_milli : null; }, color: function () { return '#8fa6c0'; }, fmt: hmClock, view: 'sleep', maxFrom: function (vals) { return Math.max(10 * 3600000, Math.max.apply(null, vals) * 1.1); } }
     ];
     return series.map(function (s) { return trendChart(s, days, selKey, base); }).join('');
   }
