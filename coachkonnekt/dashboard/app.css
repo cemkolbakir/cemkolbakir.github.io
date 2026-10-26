@@ -115,3 +115,75 @@ tbody tr.click:hover { background: var(--panel-2); }
   .who .email { display: none; }
   .tile .val { font-size: 2rem; }
 }
+
+/* ---------- athlete page: day view ---------- */
+.daynav { display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.navbtn { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); color: var(--chalk); text-decoration: none; font-size: 1.5rem; line-height: 1; }
+.navbtn:hover { border-color: var(--chalk); }
+.navbtn.off { opacity: .3; }
+.daypick { position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px; background: var(--ink); border: 1px solid var(--line); font-family: var(--mono); font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; min-width: 210px; justify-content: center; }
+.daypick input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; padding: 0; border: 0; }
+.daypick input::-webkit-calendar-picker-indicator { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.rings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.ring { display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--chalk); background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 16px 8px 14px; transition: border-color .15s; }
+.ring:hover, .ring.on { border-color: var(--chalk); }
+.ring svg { width: min(150px, 100%); height: auto; }
+.ring-val { fill: var(--chalk); font-family: var(--display); font-weight: 700; font-size: 34px; }
+.ring-unit { font-size: 20px; }
+.ring-label { font-family: var(--mono); font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; }
+.daygrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 16px; margin-bottom: 24px; align-items: start; }
+.acts { display: grid; gap: 8px; margin-top: 10px; }
+.act { display: grid; grid-template-columns: 92px 1fr auto; align-items: center; gap: 12px; padding: 8px; border-radius: 12px; background: var(--panel-2); text-decoration: none; color: var(--chalk); border: 1px solid transparent; }
+.act:hover, .act.on { border-color: var(--chalk); }
+.act b { text-transform: uppercase; letter-spacing: .08em; font-size: .9rem; }
+.act .times { font-family: var(--mono); font-size: .75rem; color: var(--mute); text-align: right; line-height: 1.5; }
+.chip { display: grid; place-items: center; height: 40px; border-radius: 9px; font-family: var(--display); font-weight: 700; font-size: 1.35rem; color: #fff; }
+.chip-sleep { background: #6f86a3; }
+.chip-strain { background: #2f86d6; }
+.detail h2 { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.detail .big { font-family: var(--display); font-size: 2.2rem; line-height: 1; }
+.cmp { margin: 10px 0 4px; padding: 8px 12px; border-radius: 10px; background: var(--ink); font-size: .85rem; font-weight: 600; }
+.cmp span { color: var(--mute); font-weight: 500; }
+.mrow { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 11px 2px; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--chalk); }
+.mrow:last-child { border-bottom: 0; }
+.mrow.link:hover { background: var(--panel-2); }
+.mlabel { font-size: .82rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; }
+.mval { text-align: right; font-variant-numeric: tabular-nums; }
+.mval b { font-family: var(--display); font-size: 1.45rem; font-weight: 700; }
+.mval small { color: var(--mute); }
+.mval em { display: block; font-style: normal; color: var(--mute); font-size: .8rem; }
+.arrow { font-size: .8rem; }
+.stagebar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin: 6px 0 4px; }
+.subh { margin: 16px 0 8px; font-size: .82rem; letter-spacing: .1em; text-transform: uppercase; }
+.zones { display: grid; gap: 6px; }
+.zrow { display: grid; grid-template-columns: 64px 1fr 56px; gap: 10px; align-items: center; font-size: .82rem; }
+.zrow div { height: 10px; background: var(--ink); border-radius: 5px; overflow: hidden; }
+.zrow i { display: block; height: 100%; border-radius: 5px; }
+.zrow b { text-align: right; font-family: var(--mono); font-weight: 600; }
+
+/* ---------- athlete page: trend charts ---------- */
+.trendhead { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.seg { display: inline-flex; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+.seg button { font: inherit; font-size: .85rem; font-weight: 600; color: var(--mute); background: none; border: 0; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+.seg button.on { background: var(--accent); color: var(--ink); }
+.tchart { margin-bottom: 14px; padding: 16px 16px 8px; }
+.thead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+.thead h3 { margin: 0; font-size: 1rem; text-transform: uppercase; letter-spacing: .06em; }
+.tscroll { overflow-x: auto; overflow-y: hidden; }
+.tscroll svg { display: block; }
+.tscroll a { cursor: pointer; }
+.tscroll a:hover rect:first-child { fill: rgba(255,255,255,.04); }
+.tv { fill: var(--chalk); font-family: var(--mono); font-size: 12px; font-weight: 600; }
+.td { fill: var(--mute); font-family: var(--mono); font-size: 11px; }
+.td.on { fill: var(--chalk); font-weight: 700; }
+
+@media (max-width: 900px) {
+  .daygrid { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .rings { gap: 8px; }
+  .ring { padding: 10px 4px; }
+  .ring-label { font-size: .68rem; letter-spacing: .08em; }
+  .daypick { min-width: 0; flex: 1; font-size: .75rem; }
+  .act { grid-template-columns: 76px 1fr auto; }
+}
