@@ -16,14 +16,13 @@
   .home-card { display: flex; align-items: center; gap: 18px; text-decoration: none; color: inherit; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; max-width: 460px; transition: border-color .15s, transform .15s; }
   .home-card:hover { border-color: var(--chalk); transform: translateY(-2px); }
   .home-card img { width: 56px; height: 56px; border-radius: 12px; flex: none; }
-  .home-card b { display: block; font-family: var(--display); font-size: 1.7rem; text-transform: uppercase; color: var(--chalk); line-height: 1.1; }
-  .home-card small { color: var(--mute); font-size: .92rem; }
+  .home-card img.wm { width: auto; height: 18px; border-radius: 0; margin-right: 6px; }
   .home p { text-align: center; margin: 18px 0 0; }
 </style>
 </head>
 <body>
 <main class="home"><div>
-  <a class="home-card" href="/coachkonnekt/"><img src="/img/logo-square.png" alt=""><span><b>CoachKonnekt</b><small>Team readiness from WHOOP data</small></span>
+  <a class="home-card" href="/coachkonnekt/"><img src="/img/logo-square.png" alt=""><img class="wm" src="/img/wordmark-white.svg" alt="CoachKonnekt">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--mute);flex:none"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
   <p class="muted"><a href="mailto:cem@kolbakir.com" class="muted">cem@kolbakir.com</a></p>
 </div></main>
