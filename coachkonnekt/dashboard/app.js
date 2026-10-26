@@ -477,7 +477,7 @@
           '<td class="num">' + (s.hrv == null ? '–' : s.hrv + ' ms') + (d == null ? '' : ' <span class="small ' + (d >= 0 ? 'up' : 'down') + '">' + (d >= 0 ? '▲' : '▼') + Math.abs(Math.round(d * 100)) + '%</span>') + '</td>' +
           '<td class="num">' + (s.rhr == null ? '–' : s.rhr + ' bpm') + '</td>' +
           '<td class="num">' + hm(s.sleepMs) + (s.sleepPerf == null ? '' : ' <span class="muted small">' + s.sleepPerf + '%</span>') + '</td>' +
-          '<td class="num">' + (s.strain == null ? '–' : s.strain.toFixed(1)) + '</td>' +
+          '<td class="num strain">' + (s.strain == null ? '–' : s.strain.toFixed(1)) + '</td>' +
           '<td>' + spark(s.spark) + '</td>' +
           '<td class="small ' + (a.connected ? 'muted' : 'err') + '">' + (a.connected ? esc(ago(a.last_sync_at)) : 'Disconnected') + '</td></tr>';
       }).join('');
@@ -523,8 +523,16 @@
     var cycId = rec && rec.cycle_id != null ? rec.cycle_id : (main && main.cycle_id != null ? main.cycle_id : null);
     var cyc = (cycId != null && d.cyc.filter(function (c) { return c.id === cycId; })[0]) ||
       d.cyc.filter(function (c) { return dayKey(c.start_time) === key || (c.end_time && dayKey(c.end_time) === key); }).pop() || null;
-    var wk = d.wk.filter(function (w) { return dayKey(w.start_time) === key; });
+    // Like WHOOP, a workout belongs to the day (cycle) it happened in, which runs from one sleep
+    // to the next. A workout at 00:30 before going to bed counts towards the previous day.
+    var wk = cyc
+      ? d.wk.filter(function (w) { return inCycle(w, cyc); })
+      : d.wk.filter(function (w) { return dayKey(w.start_time) === key && !d.cyc.some(function (c) { return inCycle(w, c); }); });
     return { key: key, rec: rec, sleep: main, naps: naps, cyc: cyc, wk: wk };
+  }
+  function inCycle(w, c) {
+    var t = Date.parse(w.start_time);
+    return t >= Date.parse(c.start_time) && (!c.end_time || t < Date.parse(c.end_time));
   }
 
   // Average of a value over the 30 days before `key` (WHOOP's "vs last 30 days").

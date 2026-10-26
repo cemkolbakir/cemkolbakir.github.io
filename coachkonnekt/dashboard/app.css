@@ -188,3 +188,5 @@ tbody tr.click:hover { background: var(--panel-2); }
   .daypick { min-width: 0; flex: 1; font-size: .75rem; }
   .act { grid-template-columns: 76px 1fr auto; }
 }
+
+td.num.strain { color: #3aa0ff; font-weight: 700; }
