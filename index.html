@@ -3,29 +3,179 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kolbakir</title>
-<meta name="description" content="Projects by Cem Kolbakır, including CoachKonnekt.">
+<title>Cem Kolbakır | Samsun University</title>
+<meta name="description" content="Cem Kolbakır, Assistant Professor of Aerospace Engineering at Samsun University. Experimental aerodynamics, plasma flow control and aircraft icing mitigation.">
+<link rel="canonical" href="https://kolbakir.com/">
 <link rel="icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;600&family=Manrope:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="/site.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400;1,700&family=Ubuntu+Mono&display=swap">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Cem Kolbakır","jobTitle":"Assistant Professor of Aerospace Engineering","email":"mailto:cem@kolbakir.com","url":"https://kolbakir.com/","affiliation":{"@type":"CollegeOrUniversity","name":"Samsun University"},"knowsAbout":["Experimental fluid dynamics","Plasma aerodynamics","Flow control","Aircraft icing","Flow visualization"],"sameAs":["https://scholar.google.com/citations?user=8fDnM1UAAAAJ","https://avesis.samsun.edu.tr/cem.kolbakir","https://coachkonnekt.com/"]}
+</script>
 <style>
-  .home { flex: 1; display: grid; place-items: center; padding: 48px 16px; }
-  .home-card { display: flex; align-items: center; gap: 18px; text-decoration: none; color: inherit; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; max-width: 460px; transition: border-color .15s, transform .15s; }
-  .home-card:hover { border-color: var(--chalk); transform: translateY(-2px); }
-  .home-card img { width: 56px; height: 56px; border-radius: 12px; flex: none; }
-  .home-card img.wm { width: auto; height: 18px; border-radius: 0; margin-right: 6px; }
-  @media (max-width: 480px) { .home-card { gap: 14px; padding: 16px 18px; } .home-card img { width: 48px; height: 48px; } .home-card img.wm { height: 14px; } }
-  .home p { text-align: center; margin: 18px 0 0; }
+  :root { --head: #1f2328; --h2: #2d3238; --h3: #40464d; --text: #3b4046; --mute: #6b7279; --link: #2b6cb0; --link-hover: #1a4a7a; --rule: #e3e6e9; --sans: Calibri, Carlito, "Segoe UI", Arial, sans-serif; --mono: "Ubuntu Mono", ui-monospace, monospace; color-scheme: light; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; padding: 56px 48px; background: #ffffff; color: var(--text); font: 400 17px/1.55 var(--sans); }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { color: var(--link-hover); }
+  a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  b, strong { color: var(--head); font-weight: 700; }
+  h1, h2, h3 { line-height: 1.15; margin: 0 0 18px; font-weight: 400; }
+  h1 { font-size: 30px; color: var(--head); margin-bottom: 14px; }
+  h2 { font-size: 24px; color: var(--h2); }
+  h3 { font-size: 18px; color: var(--h3); font-weight: 700; margin: 24px 0 12px; }
+  p, ul, ol { margin: 0 0 18px; }
+  ul { padding-left: 1.3em; }
+  li { margin-bottom: 4px; }
+  .wrapper { max-width: 900px; margin: 0 auto; }
+  header { width: 280px; position: fixed; }
+  header p { margin: 0 0 14px; }
+  header .email { font-family: var(--mono); font-size: 14px; line-height: 1.6; }
+  main { width: 560px; margin-left: auto; padding-bottom: 56px; }
+  section { margin-bottom: 34px; }
+  .pubs { list-style: none; padding: 0; }
+  .pubs li { margin-bottom: 16px; }
+  .pubs .t { display: block; font-weight: 400; color: var(--head); }
+  .pubs .a, .pubs .v { display: block; }
+  .pubs .me { color: var(--head); font-weight: 700; }
+  .pubs .v { font-style: italic; }
+  .pubs .v b { font-style: normal; font-weight: 400; color: var(--text); }
+  .btn { display: inline-block; font-family: var(--mono); font-style: normal; font-size: 12px; line-height: 1.4; color: var(--mute); border: 1px solid var(--rule); border-radius: 3px; padding: 0 6px; margin: 4px 4px 0 0; }
+  .btn:hover { color: var(--link-hover); border-color: var(--link-hover); }
+  details summary { cursor: pointer; color: var(--link); margin-bottom: 14px; }
+  details summary:hover { color: var(--link-hover); }
+  .edu { list-style: none; padding: 0; }
+  .edu li { margin-bottom: 8px; }
+  .edu .deg { font-weight: 400; color: var(--head); }
+  .project { display: flex; align-items: center; gap: 12px; }
+  .project img { width: 40px; height: 40px; border-radius: 9px; flex: none; }
+  @media (max-width: 960px) {
+    body { padding: 32px max(20px, env(safe-area-inset-right, 0px)) 32px max(20px, env(safe-area-inset-left, 0px)); }
+    header, main { position: static; width: auto; }
+    main { margin: 24px 0 0; padding: 24px 0 0; border-top: 1px solid var(--rule); }
+    }
+  @media (max-width: 480px) {
+    body { padding: 20px max(16px, env(safe-area-inset-right, 0px)) 20px max(16px, env(safe-area-inset-left, 0px)); }
+    }
 </style>
 </head>
 <body>
-<main class="home"><div>
-  <a class="home-card" href="https://coachkonnekt.com/"><img src="/img/logo-square.png" alt=""><img class="wm" src="/img/wordmark-white.svg" alt="CoachKonnekt">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--mute);flex:none"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-  <p class="muted"><a href="mailto:cem@kolbakir.com" class="muted">cem@kolbakir.com</a></p>
-</div></main>
+<div class="wrapper">
+<header>
+  <h1>Cem Kolbakır</h1>
+  <p>Assistant Professor<br><a href="https://www.samsun.edu.tr/">Aerospace Engineering, Samsun University</a></p>
+  <p class="email"><a href="mailto:cem.kolbakir@samsun.edu.tr">cem.kolbakir@samsun.edu.tr</a><br><a href="mailto:cem@kolbakir.com">cem@kolbakir.com</a></p>
+</header>
+
+<main>
+<section id="research">
+  <h2>Research Interests</h2>
+  <ul>
+    <li><b>Plasma aerodynamics:</b> thermal and momentum effects of AC- and nanosecond-pulsed DBD plasma actuators</li>
+    <li><b>Icing mitigation:</b> plasma-based anti-/de-icing for aircraft and wind turbines, hybrid strategies with superhydrophobic coatings</li>
+    <li><b>Flow control:</b> separation, wake and gust control on airfoils at low Reynolds numbers</li>
+    <li><b>Experimental methods:</b> flow visualization, hot-wire anemometry, force and infrared measurements</li>
+  </ul>
+</section>
+
+<section id="education">
+  <h2>Education</h2>
+  <ul class="edu">
+    <li><span class="deg">Ph.D., Iowa State University</span>, 2019</li>
+    <li><span class="deg">M.Sc., Igor Sikorsky Kyiv Polytechnic Institute</span>, 2016</li>
+    <li><span class="deg">B.Sc., Istanbul Technical University</span>, 2012</li>
+  </ul>
+</section>
+
+<section id="publications">
+  <h2>Publications</h2>
+  <p>Full list on <a href="https://scholar.google.com/citations?user=8fDnM1UAAAAJ&amp;hl=en">Google Scholar</a>.</p>
+
+  <h3>Journal Articles</h3>
+  <ol class="pubs">
+    <li><span class="t">Parametric study on the thermodynamic characteristic of DBD plasma actuations pertinent to aircraft icing mitigation</span><span class="a"><span class="me">C. Kolbakır</span>, H. Hu, Y. Liu, H. Hu</span><span class="v"><b>Transport Phenomena</b>, 2026</span></li>
+    <li><span class="t">Wake manipulation on a NACA 0018 airfoil using trailing edge dielectric barrier discharge plasma actuators</span><span class="a">T. Çobanoğlu, G. Jurnal, N. Sevinç, M. Yazanel, <span class="me">C. Kolbakır</span>, A. S. Durna</span><span class="v"><b>Transport Phenomena</b>, 2026</span><a class="btn" href="https://doi.org/10.1515/tp-2026-0082">DOI</a></li>
+    <li><span class="t">An experimental study on flow control at low Reynolds numbers using DBD plasma actuators on NACA 4412 airfoil</span><span class="a">G. Jurnal, <span class="me">C. Kolbakır</span>, B. Karadağ, A. S. Durna</span><span class="v"><b>Journal of Aeronautics and Space Technologies</b>, 18(1), 2025</span><a class="btn" href="https://jast.hho.msu.edu.tr/index.php/JAST/article/view/606">PDF</a></li>
+    <li><span class="t">An experimental investigation of reducing the wake length at a low speed by passive flow control and biomimetic application</span><span class="a">S. Şahin, A. S. Durna, <span class="me">C. Kolbakır</span></span><span class="v"><b>Journal of Scientific Reports-A</b>, 59, 2024</span><a class="btn" href="https://doi.org/10.59313/jsr-a.1510817">DOI</a></li>
+    <li><span class="t">Plasma actuation effect on a NACA 4412 airfoil</span><span class="a">B. Karadağ, <span class="me">C. Kolbakır</span>, A. S. Durna</span><span class="v"><b>Aircraft Engineering and Aerospace Technology</b>, 93(10), 2021</span><a class="btn" href="https://doi.org/10.1108/AEAT-04-2021-0101">DOI</a></li>
+    <li><span class="t">An experimental study on different plasma actuator layouts for aircraft icing mitigation</span><span class="a"><span class="me">C. Kolbakır</span>, H. Hu, Y. Liu, H. Hu</span><span class="v"><b>Aerospace Science and Technology</b>, 107, 2020</span><a class="btn" href="https://doi.org/10.1016/j.ast.2020.106325">DOI</a></li>
+    <li><span class="t">An experimental study on the thermal effects of duty-cycled plasma actuation pertinent to aircraft icing mitigation</span><span class="a">Y. Liu, <span class="me">C. Kolbakır</span>, H. Hu, X. Meng, H. Hu</span><span class="v"><b>International Journal of Heat and Mass Transfer</b>, 136, 2019</span><a class="btn" href="https://doi.org/10.1016/j.ijheatmasstransfer.2019.03.068">DOI</a></li>
+    <li><span class="t">An experimental study on the thermal characteristics of NS-DBD plasma actuation and application for aircraft icing mitigation</span><span class="a">Y. Liu, <span class="me">C. Kolbakır</span>, A. Y. Starikovskiy, R. B. Miles, H. Hu</span><span class="v"><b>Plasma Sources Science and Technology</b>, 28(1), 2019</span><a class="btn" href="https://doi.org/10.1088/1361-6595/aaedf8">DOI</a></li>
+    <li><span class="t">A comparison study on the thermal effects in DBD plasma actuation and electrical heating for aircraft icing mitigation</span><span class="a">Y. Liu, <span class="me">C. Kolbakır</span>, H. Hu, H. Hu</span><span class="v"><b>International Journal of Heat and Mass Transfer</b>, 124, 2018</span><a class="btn" href="https://doi.org/10.1016/j.ijheatmasstransfer.2018.03.076">DOI</a></li>
+    <li><span class="t">Wing geometry formation for a portable high-altitude aircraft (in Ukrainian)</span><span class="a">D. M. Zinchenko, <span class="me">C. Kolbakır</span></span><span class="v"><b>Mechanics of Gyroscopic Systems</b>, 2016</span></li>
+  </ol>
+
+  <h3>Book Chapter</h3>
+  <ol class="pubs">
+    <li><span class="t">An experimental investigation on the thermodynamic characteristics of DBD plasma actuations for aircraft icing mitigation</span><span class="a"><span class="me">C. Kolbakır</span>, H. Hu, Y. Liu, H. Hu</span><span class="v">In <b>Plasma Science and Technology</b>, IntechOpen, 2022</span><a class="btn" href="https://www.intechopen.com/chapters/78718">PDF</a></li>
+  </ol>
+
+  <h3>Conference Papers</h3>
+  <ol class="pubs">
+    <li><span class="t">A hybrid anti-/de-icing strategy by combining NS-DBD plasma actuator and superhydrophobic coating for aircraft icing mitigation</span><span class="a"><span class="me">C. Kolbakır</span>, H. Hu, Y. Liu, H. Hu</span><span class="v"><b>AIAA SciTech Forum</b>, 2019</span><a class="btn" href="https://doi.org/10.2514/6.2019-0050">DOI</a></li>
+    <li><span class="t">An experimental investigation on the thermal effects of NS-DBD and AC-DBD plasma actuators for aircraft icing mitigation</span><span class="a"><span class="me">C. Kolbakır</span>, Y. Liu, H. Hu, A. Y. Starikovskiy, R. B. Miles</span><span class="v"><b>AIAA Aerospace Sciences Meeting</b>, 2018</span><a class="btn" href="https://doi.org/10.2514/6.2018-0164">DOI</a></li>
+  </ol>
+  <details>
+    <summary>Show all 22 conference papers and abstracts</summary>
+    <ol class="pubs">
+      <li><span class="t">Experimental study on flow visualization and aerodynamic effects of rotating cylinders on airfoils</span><span class="a">M. Beşinci, A. A. Eroğlu, R. Çıkar, M. O. Yamal, A. S. Durna, <span class="me">C. Kolbakır</span></span><span class="v"><b>Ankara International Aerospace Conference (AIAC)</b>, 2025</span></li>
+      <li><span class="t">An experimental analysis of the aerodynamic effects of plasma dielectric barrier discharge (DBD) actuators using hot-wire anemometry</span><span class="a">R. Çıkar, M. O. Yamal, A. A. Eroğlu, M. Beşinci, <span class="me">C. Kolbakır</span>, A. S. Durna</span><span class="v"><b>Ankara International Aerospace Conference (AIAC)</b>, 2025</span></li>
+      <li><span class="t">Separation control using plasma actuation in vortex gust encounters</span><span class="a">G. Jurnal, <span class="me">C. Kolbakır</span>, A. S. Durna, O. İbrahimağaoğlu, E. E. Şen, M. Sarıtaş, et al.</span><span class="v"><b>Colloquium on Vortex Dominated Flows (DisCoVor)</b>, Delft, 2024 (abstract)</span></li>
+      <li><span class="t">Kamburluk ve kalınlıkları farklı kanat profilleri etrafındaki akışın plazma aktüatörle kontrolü</span><span class="a">G. Jurnal, T. Çobanoğlu, <span class="me">C. Kolbakır</span>, A. S. Durna</span><span class="v"><b>Isı Bilimi ve Tekniği Kongresi (ULIBTK)</b>, 2023</span></li>
+      <li><span class="t">Yunuslama hareketi yapan kanat üzerindeki akışın plazma aktüatörle kontrolü</span><span class="a">G. Jurnal, M. Sarıtaş, <span class="me">C. Kolbakır</span>, O. Çetiner</span><span class="v"><b>Isı Bilimi ve Tekniği Kongresi (ULIBTK)</b>, 2023</span></li>
+      <li><span class="t">Aktif ve pasif akış kontrol sistemlerinin dumanla akış görüntüleme tekniğiyle deneysel olarak incelenmesi</span><span class="a">T. Çobanoğlu, R. Taşçıoğlu, S. Şahin, N. Sevinç, M. Yazanel, B. Dobur, et al.</span><span class="v"><b>Ulusal Havacılık ve Uzay Konferansı (UHUK)</b>, 2022</span><a class="btn" href="http://www.uhuk.org.tr/bildiri.php/UHUK-2022-093">PDF</a></li>
+      <li><span class="t">Quantification of dynamic interactions of DBD plasma discharges with water and ice pertinent to wind turbine icing mitigation</span><span class="a">H. Hu, H. Hu, <span class="me">C. Kolbakır</span>, Y. Liu</span><span class="v"><b>APS Division of Fluid Dynamics</b>, 2022 (abstract)</span></li>
+      <li><span class="t">An experimental study to characterize the dynamic interactions of DBD plasma discharges with water and ice pertinent to aircraft inflight icing mitigation</span><span class="a">H. Hu, <span class="me">C. Kolbakır</span>, H. Hu, Y. Liu</span><span class="v"><b>APS Division of Fluid Dynamics</b>, 2021 (abstract)</span></li>
+      <li><span class="t">Experimental analysis of the effect of plasma actuator on flow control on NACA 4412 airfoil</span><span class="a">G. Jurnal, <span class="me">C. Kolbakır</span>, A. S. Durna, B. Karadağ</span><span class="v"><b>Ankara International Aerospace Conference (AIAC)</b>, 2021</span><a class="btn" href="http://aiac.ae.metu.edu.tr/paper.php?No=AIAC-2021-148">PDF</a></li>
+      <li><span class="t">Improvement of smoke rakes and the image processing for the flow visualization experiments</span><span class="a">G. Jurnal, C. Köse, <span class="me">C. Kolbakır</span>, A. S. Durna, B. Karadağ</span><span class="v"><b>Ankara International Aerospace Conference (AIAC)</b>, 2021</span><a class="btn" href="http://aiac.ae.metu.edu.tr/paper.php?No=AIAC-2021-151">PDF</a></li>
+      <li><span class="t">Dielektrik bariyer deşarj plazma aktüatörün NACA 4412 kanat profili aerodinamiğine etkileri</span><span class="a">B. Karadağ, <span class="me">C. Kolbakır</span>, A. S. Durna</span><span class="v"><b>Ulusal Havacılık ve Uzay Konferansı (UHUK)</b>, 2020</span><a class="btn" href="http://www.uhuk.org.tr/bildiri.php?No=UHUK-2020-054">PDF</a></li>
+      <li><span class="t">Effects of the layout of DBD plasma actuators on its anti-/de-icing performance for aircraft icing mitigation</span><span class="a"><span class="me">C. Kolbakır</span>, H. Hu, Y. Liu, H. Hu</span><span class="v"><b>APS Division of Fluid Dynamics</b>, 2019 (abstract)</span></li>
+      <li><span class="t">An experimental study on the effects of the layout of DBD plasma actuators on its anti-/de-icing performance for aircraft icing mitigation</span><span class="a"><span class="me">C. Kolbakır</span>, Y. Liu, H. Hu, H. Hu</span><span class="v"><b>SAE International Conference on Icing of Aircraft, Engines, and Structures</b>, 2019</span><a class="btn" href="https://doi.org/10.4271/2019-01-2033">DOI</a></li>
+      <li><span class="t">A parametric study on the thermodynamic characteristics of DBD plasma actuation and its potential for wind turbine icing mitigation</span><span class="a"><span class="me">C. Kolbakır</span>, L. Gao, Y. Liu, H. Hu</span><span class="v"><b>SAE International Conference on Icing of Aircraft, Engines, and Structures</b>, 2019</span><a class="btn" href="https://doi.org/10.4271/2019-01-2031">DOI</a></li>
+      <li><span class="t">A hybrid anti-/de-icing strategy by combining NS-DBD plasma actuator and superhydrophobic coating for aircraft icing mitigation</span><span class="a"><span class="me">C. Kolbakır</span>, H. Hu, Y. Liu, H. Hu</span><span class="v"><b>AIAA SciTech Forum</b>, 2019</span><a class="btn" href="https://doi.org/10.2514/6.2019-0050">DOI</a></li>
+      <li><span class="t">Utilizing thermal effect induced by dielectric-barrier-discharge (DBD) plasma for aircraft icing mitigation</span><span class="a">H. Hu, <span class="me">C. Kolbakır</span>, H. Hu, Y. Liu</span><span class="v"><b>APS Division of Fluid Dynamics</b>, 2018 (abstract)</span></li>
+      <li><span class="t">A parametric study to explore ns-DBD plasma actuation for aircraft icing mitigation</span><span class="a">Y. Liu, <span class="me">C. Kolbakır</span>, H. Hu, A. Y. Starikovskiy, R. B. Miles</span><span class="v"><b>AIAA Flow Control Conference</b>, 2018</span><a class="btn" href="https://doi.org/10.2514/6.2018-3756">DOI</a></li>
+      <li><span class="t">An explorative study to use thermal effects of duty-cycled plasma actuations for aircraft icing mitigation</span><span class="a">Y. Liu, <span class="me">C. Kolbakır</span>, H. Hu, H. Hu, X. Meng</span><span class="v"><b>AIAA Atmospheric and Space Environments Conference</b>, 2018</span><a class="btn" href="https://doi.org/10.2514/6.2018-3653">DOI</a></li>
+      <li><span class="t">An experimental investigation on an electric-thermal strategy for wind turbine icing mitigation</span><span class="a">L. Gao, Y. Liu, <span class="me">C. Kolbakır</span>, H. Hu, et al.</span><span class="v"><b>AIAA Atmospheric and Space Environments Conference</b>, 2018</span><a class="btn" href="https://doi.org/10.2514/6.2018-3658">DOI</a></li>
+      <li><span class="t">An experimental investigation on the thermal effects of NS-DBD and AC-DBD plasma actuators for aircraft icing mitigation</span><span class="a"><span class="me">C. Kolbakır</span>, Y. Liu, H. Hu, A. Y. Starikovskiy, R. B. Miles</span><span class="v"><b>AIAA Aerospace Sciences Meeting</b>, 2018</span><a class="btn" href="https://doi.org/10.2514/6.2018-0164">DOI</a></li>
+      <li><span class="t">A comparison study on AC-DBD plasma and electrical heating for aircraft icing mitigation</span><span class="a">Y. Liu, <span class="me">C. Kolbakır</span>, H. Hu, H. Hu</span><span class="v"><b>AIAA Aerospace Sciences Meeting</b>, 2018</span><a class="btn" href="https://doi.org/10.2514/6.2018-0167">DOI</a></li>
+      <li><span class="t">An explorative study to use DBD plasma generation for aircraft icing mitigation</span><span class="a">H. Hu, W. Zhou, Y. Liu, <span class="me">C. Kolbakır</span></span><span class="v"><b>APS Division of Fluid Dynamics</b>, 2017 (abstract)</span></li>
+    </ol>
+  </details>
+</section>
+
+<section id="teaching">
+  <h2>Teaching</h2>
+  <h3>2026</h3>
+  <ul>
+    <li>UUM-A606 Experimental Aerodynamics (graduate course)</li>
+    <li>HUM405 Flight Stability and Control</li>
+    <li>HUM304 Experimental Engineering II</li>
+    <li>HUM306 Flight Mechanics</li>
+    <li>HUM202 Fluid Mechanics</li>
+    <li>UUM315 Measurement Techniques</li>
+    <li>HUM401 Design Project I</li>
+    <li>HUM402 Design Project II</li>
+  </ul>
+</section>
+
+<section id="students">
+  <h2>Supervised Theses</h2>
+  <ul>
+    <li>Predictive maintenance for aircraft using time-series analysis (MSc, 2025)</li>
+    <li>Plasma actuators for gust load alleviation (MSc, 2024, co-advisor)</li>
+    <li>Numerical study of flow control over a cylinder using notches (MSc, 2024)</li>
+  </ul>
+</section>
+
+<section id="projects">
+  <h2>Projects</h2>
+  <p class="project"><img src="/img/logo-square.png" alt=""><span><a href="https://coachkonnekt.com/"><b>CoachKonnekt</b></a>, an app I built for coaches and their athletes.</span></p>
+</section>
+
+</main>
+</div>
 </body>
 </html>
