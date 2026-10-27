@@ -4,25 +4,26 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kolbakir</title>
-<meta name="description" content="Projects by Cem Kolbakır, including CoachKonnekt, the team readiness board built on WHOOP data.">
+<meta name="description" content="Projects by Cem Kolbakır, including CoachKonnekt.">
 <link rel="icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;600&family=Manrope:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="/coachkonnekt/site.css">
+<link rel="stylesheet" href="/site.css">
 <style>
   .home { flex: 1; display: grid; place-items: center; padding: 48px 16px; }
   .home-card { display: flex; align-items: center; gap: 18px; text-decoration: none; color: inherit; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; max-width: 460px; transition: border-color .15s, transform .15s; }
   .home-card:hover { border-color: var(--chalk); transform: translateY(-2px); }
   .home-card img { width: 56px; height: 56px; border-radius: 12px; flex: none; }
   .home-card img.wm { width: auto; height: 18px; border-radius: 0; margin-right: 6px; }
+  @media (max-width: 480px) { .home-card { gap: 14px; padding: 16px 18px; } .home-card img { width: 48px; height: 48px; } .home-card img.wm { height: 14px; } }
   .home p { text-align: center; margin: 18px 0 0; }
 </style>
 </head>
 <body>
 <main class="home"><div>
-  <a class="home-card" href="/coachkonnekt/"><img src="/img/logo-square.png" alt=""><img class="wm" src="/img/wordmark-white.svg" alt="CoachKonnekt">
+  <a class="home-card" href="https://coachkonnekt.com/"><img src="/img/logo-square.png" alt=""><img class="wm" src="/img/wordmark-white.svg" alt="CoachKonnekt">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--mute);flex:none"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
   <p class="muted"><a href="mailto:cem@kolbakir.com" class="muted">cem@kolbakir.com</a></p>
 </div></main>
